@@ -1,7 +1,7 @@
 
-# <h1 align="center">![Descripción](https://img.shields.io/badge/Spotify_'_s_"New_Releases"_:_ETL--airflow--pipeline--Project-20B2AA?style=for-the-badge)</h1> #
+# <h1 align="center">![Descripción](https://img.shields.io/badge/Spotify_'_s_"New_Releases"_:_ETL--airflow--pipeline--Project-20B2AA?style=for-the-badge)</h1> :rocket::rocket:
 
-# ![Descripción](https://img.shields.io/badge/DESCRIPCION-7B9AE6?style=plastic) :rocket:
+# ![Descripción](https://img.shields.io/badge/DESCRIPCION-7B9AE6?style=plastic) 
 
 Este proyecto consiste en un Pipeline de un ETL utilizando lenguaje Python, Airflow , la API de Spotify y AWS Redshift para recopilar datos de los álbums, que se actualiza periódicamente según los últimos 50 lanzamientos subidos en dicha plataforma en todo el mundo.
 
