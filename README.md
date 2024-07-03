@@ -15,7 +15,7 @@ La forma en que interactuamos con la API de Spotify es mediante el uso de la bib
 Se puede conseguir las credenciales de la API de Spotyfy en el siguiente link
 Generate your Spotify API access keys here: https://developer.spotify.com
 
-# ![La función Transform ](https://img.shields.io/badge/LA_FUNCION_TRANSFORM_(data_transform)-8A2BE2) #
+# ![La función Transform ](https://img.shields.io/badge/LA_FUNCION_TRANSFORM-8A2BE2) # ![ok ](https://img.shields.io/badge/data_trasnform()-orange)
 
 La función instancia y estructura en un Dataframe de __PANDAS__ los datos obtenidos en el proceso de Extracción; separa la totalidad de los datos de Spotify en conjuntos de datos lógicos para los datos de Album y Artista y se realiza un limpieza y trasformación de los mismos, según el caso.
 
