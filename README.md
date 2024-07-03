@@ -1,5 +1,5 @@
 # <h1 align="center"> Spotify's "New Releases" : ETL-airflow-pipeline Project </h1>
-# ![Descripción](https://img.shields.io/badge/Spotify's_"New_Releases"_:_ETL-airflow-pipeline_Project-20B2AA?style=for-the-badge) #
+# ![Descripción](https://img.shields.io/badge/Spotify_'_s_"New_Releases"_:_ETL--airflow--pipeline--Project-20B2AA?style=for-the-badge) #
 
 
 ## ![Descripción](https://img.shields.io/badge/DESCRIPCION-20B2AA?style=flat-square) ##
@@ -25,7 +25,7 @@ La función instancia y estructura en un Dataframe de __PANDAS__ los datos obten
 Después de que los datos del álbum, artista se hayan transformado y estructurados en nuestro Dataframe, a travez de la libreria __psycopg2__ primero realizamos la conexión con el motor de base de datos con la función __connect_Db()__, se crea la tabla correspondiente con la función __create_Table()__; se carga la información en dicha tabla en el Datawerehouse de __AWS-Redshift__, con __upload_data()__.
 
 
-# ![Dependencias y librerías ](https://img.shields.io/badge/Dependencias_y_Librerías-56B2A7-style=plastic) #
+# ![Dependencias y librerías ](https://img.shields.io/badge/Dependencias_y_Librerías-56B2A7?style=plastic) #
 
 El proyecto esta montado en un contenedor de docker específico configurado para correr __Airflow__ , donde monatermos todos los 
 requerimientos necesarios para que pueda funcionar el código en cualquier entorno.
