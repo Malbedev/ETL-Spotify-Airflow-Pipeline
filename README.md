@@ -1,5 +1,5 @@
 
-# <h1 align="center">![Descripción] :musical_score::musical_score: (https://img.shields.io/badge/Spotify_'_s_"New_Releases"_:_ETL--airflow--pipeline--Project-20B2AA?style=for-the-badge):musical_score::musical_score:</h1>  #
+# <h1 align="center">:musical_score::musical_score: ![Descripción] (https://img.shields.io/badge/Spotify_'_s_"New_Releases"_:_ETL--airflow--pipeline--Project-20B2AA?style=for-the-badge):musical_score::musical_score:</h1>  #
 
 
 # ![Descripción](https://img.shields.io/badge/DESCRIPCION-7B9AE6?style=plastic) 
