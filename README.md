@@ -24,7 +24,8 @@ La función instancia y estructura en un Dataframe de __PANDAS__ los datos obten
 Después de que los datos del álbum, artista se hayan transformado y estructurados en nuestro Dataframe, a travez de la libreria __psycopg2__ primero realizamos la conexión con el motor de base de datos con la función __connect_Db()__, se crea la tabla correspondiente con la función __create_Table()__; se carga la información en dicha tabla en el Datawerehouse de __AWS-Redshift__, con __upload_data()__.
 
 
-#### [Dependencias y librerías ](https://img.shields.io/badge/Dependencias-Librerías-orange)
+#### ![Dependencias y librerías ](https://img.shields.io/badge/Dependencias-Librerías-orange)
+
 El proyecto esta montado en un contenedor de docker específico configurado para correr __Airflow__ , donde monatermos todos los 
 requerimientos necesarios para que pueda funcionar el código en cualquier entorno.
 La configuración esta descripta en el __DOCKERFILE__ y la plantilla __docker-compose.yaml__
