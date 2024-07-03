@@ -1,5 +1,5 @@
 
-# <h1 align="center">![Descripción](https://img.shields.io/badge/Spotify_'_s_"New_Releases"_:_ETL--airflow--pipeline--Project-20B2AA?style=for-the-badge)</h1> #
+# <h1 align="center">![Descripción](https://img.shields.io/badge/Spotify_'_s_"New_Releases"_:_ETL--airflow--pipeline--Project-20B2AA?style=for-the-badge)</h1> # :rocket: :rocket:
 
 
 # ![Descripción](https://img.shields.io/badge/DESCRIPCION-7B9AE6?style=plastic) 
