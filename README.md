@@ -11,13 +11,13 @@ Todo esto orquestado con funciones y tareas creadas desde un DAG de airflow en e
 
 
 # ![La función Extract ](https://img.shields.io/badge/LA_FUNCION_EXTRACT_(data_exctract)-8A2BE2) #
-------------------------------
+
 La forma en que interactuamos con la API de Spotify es mediante el uso de la biblioteca __SPOTIPY__ y ayuda principalmente con la autenticación de la API.Una vez que se han extraído los datos, se almacenan en un diccionario de python.
 Se puede conseguir las credenciales de la API de Spotyfy en el siguiente link
 Generate your Spotify API access keys here: https://developer.spotify.com
 
-# ![La función Transform ](https://img.shields.io/badge/LA_FUNCION_TRANSFORM_(data_transform)-8A2BE7) #
---------------------------------
+# ![La función Transform ](https://img.shields.io/badge/LA_FUNCION_TRANSFORM_(data_transform)-5A3BE2) #
+
 La función instancia y estructura en un Dataframe de __PANDAS__ los datos obtenidos en el proceso de Extracción; separa la totalidad de los datos de Spotify en conjuntos de datos lógicos para los datos de Album y Artista y se realiza un limpieza y trasformación de los mismos, según el caso.
 
 ### La función Load  (upload_data)
