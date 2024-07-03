@@ -12,7 +12,7 @@ from airflow.operators.python_operator import PythonOperator
 #Llamar al método de la libreria dotenv para obtener nustras variables de entorno 
 load_dotenv()
 
-#Agregar a un diccionario nuetras credenciales 
+# Agregar a un diccionario nuestras credenciales 
 user_credentials = {
     "REDSHIFT_USERNAME" : os.getenv('REDSHIFT_USERNAME'),
     "REDSHIFT_PASSWORD" : os.getenv('REDSHIFT_PASSWORD'),
@@ -21,17 +21,17 @@ user_credentials = {
     "REDSHIFT_DBNAME" : os.getenv('REDSHIFT_DBNAME')
 }
 
-#Asignamos la veriables table y schema, con el nombre de la tabla y esquema correpondiente
+# Asignar las variables table y schema, con el nombre de la tabla y esquema correspondiente
 table='stage_spotify_new_releases_table'
 schema = "mauroalberelli_coderhouse"
 
-#Intanciar las Clases
+# Instanciar las Clases
 data_conn = DataConn(user_credentials, schema)
 SpotifyApi = DataManager()
 
-
-def start_conn():
-    data_conn.conectar_Redshift()
+# Definir nuestras funciones para pasarle al operador del DAG()
+def start_conn(): 
+    data_conn.connect_Db()
 def tables():
     data_conn.create_table(table)  
 def get_and_transform():
@@ -40,23 +40,28 @@ def get_and_transform():
 def insert_data(data,table):
     data_conn.upload_data(data,table)
 
-# argumentos por defecto para el DAG
+# Argumentos por defecto para el DAG
 default_args = {
     'owner': 'Mauro',
     'start_date': datetime(2024,6,29),
     'retries':5,
     'retry_delay': timedelta(minutes=5)
+    
 }
 
+# Definir el DAG con intervalo @daily(diario) para su ejecución
 with DAG(dag_id='Spotify_data_pipeline',
         default_args=default_args,
         description='Agrega datos de los 50 ultimos lanzamientos en spotify',
         schedule_interval="@daily",
         catchup=False) as dag:
     
+    # Pasar nuestras funciones creadas para que las ejecute el Operator
     task_conexion = PythonOperator(task_id='conexion',python_callable=start_conn)
     task_tables = PythonOperator(task_id='tablas',python_callable=tables)
+    # Pasar como argumentos funciones en un lambda para recuperar y trasmitir de tarea a tarea los resultados de dichas funciones
     task_process_data = PythonOperator(task_id='data',python_callable=lambda:get_and_transform())
     task_insert_data =PythonOperator(task_id='upload',python_callable=lambda:insert_data(get_and_transform(),table))
 
+# Establecer el orden de ejecución de nuestras tareas
 task_conexion >> task_tables >> task_process_data >> task_insert_data

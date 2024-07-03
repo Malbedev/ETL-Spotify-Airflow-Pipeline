@@ -6,8 +6,6 @@ import logging
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import datetime
-from sqlalchemy import create_engine,Column,NVARCHAR,Date,Integer
-from sqlalchemy.ext.declarative import declarative_base
 import psycopg2
 from psycopg2.extras import execute_values
 from dotenv import load_dotenv
@@ -34,16 +32,14 @@ class DataConn:
         self.config = config
         self.schema = schema
         self.table = None
-        # Método de la Libreria SqlAlchemy que nos permite generar tablas, ver documentacion de la libreria
-        self.Base= declarative_base()
-
         self.username = self.config.get('REDSHIFT_USERNAME')
         self.password = self.config.get('REDSHIFT_PASSWORD')
         self.host = self.config.get('REDSHIFT_HOST')
         self.port = self.config.get('REDSHIFT_PORT', '5439')
         self.dbname = self.config.get('REDSHIFT_DBNAME')
 
-    def conectar_Redshift(self):
+    # Conectar la base da datos con el módulo de psycopg2 
+    def connect_Db(self):
         try:
             psycopg2.connect(host=self.host,
             dbname=self.dbname,
@@ -57,6 +53,7 @@ class DataConn:
             logging.error(f"Failed to create connection:{e}")
             raise
 
+    # Crear una tabla con lenguaje SQL atravéz de la librería psycopg2 , recibe un string con el nombre de la tabla
     def create_table(self,table:str):
             logging.info("Creating table....")
             schema=self.schema
@@ -87,15 +84,13 @@ class DataConn:
             """)
                 conn.commit()
                 logging.info(f" Table created! ")
-
-                with conn.cursor() as cur:
-                    cur.execute(f"Truncate table {table}")
-                    count = cur.rowcount
-                    conn.close() 
+     
             except Exception as e:
                 logging.error(f"Failed to create table:{e}")
                 raise
 
+    # Cargar la data en nuestra tabla creada anteriormente
+    ### Función que recibe com parámetros un Dataframe de pandas y un string con el nombre de la tabla ###
     def upload_data(self,data: pd.DataFrame, table: str):
          
          logging.info("inserting data to table....")
@@ -106,10 +101,12 @@ class DataConn:
                 port=self.port
                 )
          df = pd.DataFrame(data)
-    
 
          with conn.cursor() as cur:
                 try:
+                    cur.execute(f"Truncate table {table}") 
+                    conn.commit()
+
                     execute_values(
                     cur,
                 f'''
@@ -129,84 +126,6 @@ class DataConn:
                     logging.error(f"Failed to upload data to {self.schema}.{table}: {e}")
                     
         
-
-    def get_conn(self):
-        # Obtener las credenciales alojadas en el archivo .env
-        username = self.config.get('REDSHIFT_USERNAME')
-        password = self.config.get('REDSHIFT_PASSWORD')
-        host = self.config.get('REDSHIFT_HOST')
-        port = self.config.get('REDSHIFT_PORT', '5439')
-        dbname = self.config.get('REDSHIFT_DBNAME')
-
-        # Construir la url para luego conectar la base da datos con el módulo de SQlAlquemy y su método crate_emgine
-        connection_url = f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{dbname}"
-        self.db_engine = create_engine(connection_url)
-
-        try:
-            with self.db_engine.connect() as connection:
-                result = connection.execute('SELECT 1;')
-            if result:
-                logging.info("Connection created")
-                return
-        except Exception as e:
-            logging.error(f"Failed to create connection: {e}")
-            raise
-
-    # Crear una tabla con SqlAlquemy según documentación de la librería, recibe un string con el nombre de la tabla
-    def createtable(self,table:str):
-        try: 
-            logging.info("Creating table....")
-            schema=self.schema
-            class MyTable(self.Base):
-                __tablename__= str(table)
-                __table_args__ = {'schema':str(schema)}
-
-                # Determinar la columnas y los tipos de datos correspondientes; y Asignar una Primary key.
-                Id = Column(NVARCHAR(50),primary_key=True)
-                Album_type = Column(NVARCHAR(50))
-                Album_name= Column(NVARCHAR(50))
-                Artist_name = Column(NVARCHAR(50))
-                Total_tracks= Column(Integer)
-                Album_genre  = Column(NVARCHAR(500))
-                Realese_date = Column(Date)
-                Album_img = Column(NVARCHAR(200))
-                Album_link = Column(NVARCHAR(200))
-                Artist_link = Column(NVARCHAR(200))
-                Load_date = Column(Date)
-
-        except Exception as e:
-            logging.warn(e)
-
-    def create_all_tables(self):
-        self.Base.metadata.create_all(self.db_engine)
-        logging.info(f" Table created! ")
-
-    # Cargar la data en nuestra tabla creada anteriormente
-    ### Función que recibe com parámetros un Dataframe de pandas y un string con el nombre de la tabla ###
-    def uploaddata(self, data: pd.DataFrame, table: str):
-        try:
-            data.to_sql(
-                table,
-                con=self.db_engine,
-                schema=self.schema,
-                if_exists='replace',
-                index=False
-            )
-
-            logging.info(f"Data from the DataFrame has been uploaded to the {self.schema}.{table} table in Redshift.")
-        except Exception as e:
-            logging.error(f"Failed to upload data to {self.schema}.{table}: {e}")
-            raise
-
-    # Cerrar la conexion
-    def close_conn(self):
-        if self.db_engine:
-            self.db_engine.dispose()
-            logging.info("Connection to Redshift closed.")
-        else:
-            logging.warning("No active connection to close.")
-
-
 ## Crear una clase para el manejo de los datos ## 
 class DataManager:
 
@@ -298,10 +217,8 @@ class DataManager:
             # Como ejemplo lo hacemos con el Id del albúm
             df['Id'] = df['Id'].apply(hashing_data)
 
-
             return(df)
-            
-        
+               
         except Exception as e:
             logging.error(e)
 
