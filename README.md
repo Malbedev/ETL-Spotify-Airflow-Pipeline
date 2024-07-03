@@ -1,6 +1,6 @@
 # <h1 align="center"> Spotify's "New Releases" : ETL-airflow-pipeline Project </h1>
 ![Descripcion](https://img.shields.io/badge/just%20the%20message-8A2BE2)
-## ![Descripción](https://img.shields.io/badge/just%20the%20message-8A2BE2)
+## ![Descripción](https://img.shields.io/badge/Descriptción-8A2BE2)
 -------------------
 Este proyecto consiste en un Pipeline de un ETL utilizando lenguaje Python, Airflow , la API de Spotify y AWS Redshift para recopilar datos de los álbums, que se actualiza periódicamente según los últimos 50 lanzamientos subidos en dicha plataforma en todo el mundo.
 
