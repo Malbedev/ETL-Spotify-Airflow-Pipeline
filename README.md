@@ -3,7 +3,6 @@
 
 ## ![Descripción](https://img.shields.io/badge/DESCRIPCION-20B2AA?style=for-the-badge) ##
 
--------------------
 Este proyecto consiste en un Pipeline de un ETL utilizando lenguaje Python, Airflow , la API de Spotify y AWS Redshift para recopilar datos de los álbums, que se actualiza periódicamente según los últimos 50 lanzamientos subidos en dicha plataforma en todo el mundo.
 
 Los componentes principales de este proyecto son las dos clases contructoras DataManager y Dataconn situadas en el Módulo __ETL_manager.py__, cada una de las cuales ejecuta a través de funciones los pasos de extracción, transformación, conexión con base de datos y carga de datos en la misma, respectivamente. 
@@ -16,11 +15,12 @@ La forma en que interactuamos con la API de Spotify es mediante el uso de la bib
 Se puede conseguir las credenciales de la API de Spotyfy en el siguiente link
 Generate your Spotify API access keys here: https://developer.spotify.com
 
-# ![La función Transform ](https://img.shields.io/badge/LA_FUNCION_TRANSFORM_(data_transform)-5A3BE2) #
+# ![La función Transform ](https://img.shields.io/badge/LA_FUNCION_TRANSFORM_(data_transform)-8A2BE2) #
 
 La función instancia y estructura en un Dataframe de __PANDAS__ los datos obtenidos en el proceso de Extracción; separa la totalidad de los datos de Spotify en conjuntos de datos lógicos para los datos de Album y Artista y se realiza un limpieza y trasformación de los mismos, según el caso.
 
-### La función Load  (upload_data)
+### [ ](https://img.shields.io/badge/LA_FUNCION_LOAD_(data_upload)-8A2BE2)
+
 Después de que los datos del álbum, artista se hayan transformado y estructurados en nuestro Dataframe, a travez de la libreria __psycopg2__ primero realizamos la conexión con el motor de base de datos con la función __connect_Db()__, se crea la tabla correspondiente con la función __create_Table()__; se carga la información en dicha tabla en el Datawerehouse de __AWS-Redshift__, con __upload_data()__.
 
 
