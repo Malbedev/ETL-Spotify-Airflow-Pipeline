@@ -1,6 +1,6 @@
 # <h1 align="center"> Spotify's "New Releases" : ETL-airflow-pipeline Project </h1>
 
-## ![Descripción](https://img.shields.io/badge/Descriptción-8A2BE2)
+
 ## ![Descripción](https://img.shields.io/badge/DESCRIPCION-20B2AA?style=for-the-badge) ##
 
 -------------------
@@ -10,7 +10,7 @@ Los componentes principales de este proyecto son las dos clases contructoras Dat
 Todo esto orquestado con funciones y tareas creadas desde un DAG de airflow en el archivo __Pipeline-ETL_Spotify.py__.
 
 
-### La función Extract (data_extract)
+# ![La función Extract ](https://img.shields.io/badge/La_función_Extract_(data_exctract)-8A2BE2)#
 ------------------------------
 La forma en que interactuamos con la API de Spotify es mediante el uso de la biblioteca __SPOTIPY__ y ayuda principalmente con la autenticación de la API.Una vez que se han extraído los datos, se almacenan en un diccionario de python.
 Se puede conseguir las credenciales de la API de Spotyfy en el siguiente link
