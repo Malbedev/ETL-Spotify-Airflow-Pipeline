@@ -19,7 +19,7 @@ Generate your Spotify API access keys here: https://developer.spotify.com
 
 La función instancia y estructura en un Dataframe de __PANDAS__ los datos obtenidos en el proceso de Extracción; separa la totalidad de los datos de Spotify en conjuntos de datos lógicos para los datos de Album y Artista y se realiza un limpieza y trasformación de los mismos, según el caso.
 
-### [ ](https://img.shields.io/badge/LA_FUNCION_LOAD_(data_upload)-8A2BE2)
+### ![ok ](https://img.shields.io/badge/LA_FUNCION_LOAD_(data_upload)-8A2BE2)
 
 Después de que los datos del álbum, artista se hayan transformado y estructurados en nuestro Dataframe, a travez de la libreria __psycopg2__ primero realizamos la conexión con el motor de base de datos con la función __connect_Db()__, se crea la tabla correspondiente con la función __create_Table()__; se carga la información en dicha tabla en el Datawerehouse de __AWS-Redshift__, con __upload_data()__.
 
