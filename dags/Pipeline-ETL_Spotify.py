@@ -57,11 +57,11 @@ with DAG(dag_id='Spotify_data_pipeline',
         catchup=False) as dag:
     
     # Pasar nuestras funciones creadas para que las ejecute el Operator
-    task_conexion = PythonOperator(task_id='conexion',python_callable=start_conn)
-    task_tables = PythonOperator(task_id='tablas',python_callable=tables)
+    task_conexion = PythonOperator(task_id='Conect-Redshift',python_callable=start_conn)
+    task_tables = PythonOperator(task_id='Create-Tables',python_callable=tables)
     # Pasar como argumentos funciones en un lambda para recuperar y trasmitir de tarea a tarea los resultados de dichas funciones
-    task_process_data = PythonOperator(task_id='data',python_callable=lambda:get_and_transform())
-    task_insert_data =PythonOperator(task_id='upload',python_callable=lambda:insert_data(get_and_transform(),table))
+    task_process_data = PythonOperator(task_id='Process-Data',python_callable=lambda:get_and_transform())
+    task_insert_data =PythonOperator(task_id='Upload-Data',python_callable=lambda:insert_data(get_and_transform(),table))
 
 # Establecer el orden de ejecución de nuestras tareas
 task_conexion >> task_tables >> task_process_data >> task_insert_data
