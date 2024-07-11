@@ -125,6 +125,29 @@ class DataConn:
                 except Exception as e:
                     logging.error(f"Failed to upload data to {self.schema}.{table}: {e}")
                     
+    def execute_query(self,query:str, table: str):
+         conn = psycopg2.connect(host=self.host,
+                dbname=self.dbname,
+                user=self.username,
+                password=self.password,
+                port=self.port
+                )
+         
+         with conn.cursor() as cur:
+                try:
+                    cur.execute(query.format(schema=self.schema,table=table)) 
+                    result=cur.fetchall()
+                    cur.close()
+                    conn.close()
+                    return result
+        
+                except Exception as e:
+                    logging.error(f"Failed query execution to {self.schema}.{table}: {e}")      
+
+    def get_query_result(self,ti,table:str):
+        query=f"SELECT Album_name,Artist_name,Album_genre,Album_link,Realese_date FROM {self.schema}.{table} ORDER BY Realese_date DESC LIMIT 10 "   
+        result = self.execute_query(query,table)
+        ti.xcom_push(key='sql_result',value=result)
         
 ## Crear una clase para el manejo de los datos ## 
 class DataManager:

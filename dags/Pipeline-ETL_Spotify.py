@@ -1,6 +1,7 @@
 
 import os
 from modules import DataManager, DataConn
+from modules.Utilities import send_email
 from dotenv import load_dotenv
 from datetime import timedelta,datetime
 from airflow import DAG
@@ -32,13 +33,21 @@ SpotifyApi = DataManager()
 # Definir nuestras funciones para pasarle al operador del DAG()
 def start_conn(): 
     data_conn.connect_Db()
+
 def tables():
     data_conn.create_table(table)  
+
 def get_and_transform():
     data=SpotifyApi.data_transform()
     return data
+
 def insert_data(data,table):
     data_conn.upload_data(data,table)
+
+def get_sql_result(**kargs):
+    ti=kargs['ti']
+    data_conn.get_query_result(ti,table)
+    
 
 # Argumentos por defecto para el DAG
 default_args = {
@@ -61,7 +70,9 @@ with DAG(dag_id='Spotify_data_pipeline',
     task_tables = PythonOperator(task_id='Create-Tables',python_callable=tables)
     # Pasar como argumentos funciones en un lambda para recuperar y trasmitir de tarea a tarea los resultados de dichas funciones
     task_process_data = PythonOperator(task_id='Process-Data',python_callable=lambda:get_and_transform())
-    task_insert_data =PythonOperator(task_id='Upload-Data',python_callable=lambda:insert_data(get_and_transform(),table))
+    task_insert_data = PythonOperator(task_id='Upload-Data',python_callable=lambda:insert_data(get_and_transform(),table))
+    task_get_sql_result = PythonOperator(task_id='Get_sql_result',python_callable=get_sql_result,provide_context=True)
+    task_send_email = PythonOperator(task_id='Send_email',python_callable=send_email,provide_context=True)
 
 # Establecer el orden de ejecución de nuestras tareas
-task_conexion >> task_tables >> task_process_data >> task_insert_data
+task_conexion >> task_tables >> task_process_data >> task_insert_data >> task_get_sql_result >>  task_send_email
