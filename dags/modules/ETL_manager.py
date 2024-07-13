@@ -24,8 +24,8 @@ logging.basicConfig(
     format='%(asctime)s: %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO)
 
-## Gererar la clase constructura para la conexión a la base de datos
-# que admite como parametros un diccionario con las credenciales y un STring con el nombnre del schema ## 
+### Gererar la clase constructura para la conexión a la base de dato 
+#  que admite como parametros un diccionario con las credenciales y un STring con el nombnre del schema ###
 
 class DataConn:
     def __init__(self, config: dict,schema: str):
@@ -40,36 +40,32 @@ class DataConn:
 
     # Conectar la base da datos con el módulo de psycopg2 
     def connect_Db(self):
-        try:
-            psycopg2.connect(host=self.host,
+        try: 
+            conn=psycopg2.connect(host=self.host,
             dbname=self.dbname,
             user=self.username,
             password=self.password,
-            port=self.port
-        )
+            port=self.port)
+            
             logging.info("Connection created")
+            return conn
 
         except Exception as e:
             logging.error(f"Failed to create connection:{e}")
             raise
 
-    # Crear una tabla con lenguaje SQL atravéz de la librería psycopg2 , recibe un string con el nombre de la tabla
+    # Crear una tabla con lenguaje SQL atravéz de la librería psycopg2, recibe un string con el nombre de la tabla
     def create_table(self,table:str):
             logging.info("Creating table....")
             schema=self.schema
             try: 
-                conn = psycopg2.connect(host=self.host,
-            dbname=self.dbname,
-            user=self.username,
-            password=self.password,
-            port=self.port
-        )
+                conn = self.connect_Db()
                 
                 with conn.cursor() as cur:
                  cur.execute(f"""
                 CREATE TABLE IF NOT EXISTS {schema}.{table}
                 (
-                id VARCHAR(50) primary key  
+                id VARCHAR(50) PRIMARY KEY 
                 ,Album_type VARCHAR(50)   
                 ,Album_name VARCHAR(50)  
                 ,Artist_name VARCHAR(50)      
@@ -80,26 +76,23 @@ class DataConn:
                 ,Album_link VARCHAR(300)
                 ,Artist_link VARCHAR(300)
                 ,Load_date date 
-                )
-            """)
+                );
+                """)
                 conn.commit()
+                cur.close()
+                conn.close()
                 logging.info(f" Table created! ")
      
             except Exception as e:
                 logging.error(f"Failed to create table:{e}")
                 raise
 
-    # Cargar la data en nuestra tabla creada anteriormente
+    # Cargar la data en nuestra tabla creada anteriormente #
     ### Función que recibe com parámetros un Dataframe de pandas y un string con el nombre de la tabla ###
     def upload_data(self,data: pd.DataFrame, table: str):
          
          logging.info("inserting data to table....")
-         conn = psycopg2.connect(host=self.host,
-                dbname=self.dbname,
-                user=self.username,
-                password=self.password,
-                port=self.port
-                )
+         conn = self.connect_Db()
          df = pd.DataFrame(data)
 
          with conn.cursor() as cur:
@@ -112,7 +105,7 @@ class DataConn:
                 f'''
                     INSERT INTO {table} (Id, Album_type, Album_name, Artist_name, Total_tracks, 
                     Album_genre, Realese_date, Album_img, Album_link, Artist_link,
-                    Load_date )
+                    Load_date)
                     VALUES %s
                     ''',
                     [tuple(row) for row in df.to_numpy()],
@@ -120,18 +113,14 @@ class DataConn:
                 )
                     conn.commit()
                     logging.info(f"Data from the DataFrame has been uploaded to the {self.schema}.{table} table in Redshift.")
+                    cur.close()
                     conn.close()
                     logging.info("Connection to Redshift closed.")
                 except Exception as e:
                     logging.error(f"Failed to upload data to {self.schema}.{table}: {e}")
                     
     def execute_query(self,query:str, table: str):
-         conn = psycopg2.connect(host=self.host,
-                dbname=self.dbname,
-                user=self.username,
-                password=self.password,
-                port=self.port
-                )
+         conn = self.connect_Db()
          
          with conn.cursor() as cur:
                 try:
@@ -145,10 +134,17 @@ class DataConn:
                     logging.error(f"Failed query execution to {self.schema}.{table}: {e}")      
 
     def get_query_result(self,ti,table:str):
-        query=f"SELECT Album_name,Artist_name,Album_genre,Album_link,Realese_date FROM {self.schema}.{table} ORDER BY Realese_date DESC LIMIT 10 "   
+
+        query=f"""SELECT Album_name,Artist_name,Album_genre,Album_link,Realese_date 
+        FROM {self.schema}.{table} 
+        ORDER BY Realese_date DESC 
+        LIMIT 10 """   
+
         result = self.execute_query(query,table)
         ti.xcom_push(key='sql_result',value=result)
         
+
+
 ## Crear una clase para el manejo de los datos ## 
 class DataManager:
 
