@@ -54,7 +54,8 @@ class DataConn:
             logging.error(f"Failed to create connection:{e}")
             raise
 
-    # Crear una tabla con lenguaje SQL atravéz de la librería psycopg2, recibe un string con el nombre de la tabla
+class DbMAnager(DataConn):
+    # Crear una tabla con lenguaje SQL a travéz de la librería psycopg2, recibe un string con el nombre de la tabla
     def create_table(self,table:str):
             logging.info("Creating table....")
             schema=self.schema
@@ -71,6 +72,7 @@ class DataConn:
                 ,Artist_name VARCHAR(50)      
                 ,Total_tracks INTEGER  
                 ,Album_genre VARCHAR(500)
+                ,Popularity INTEGER
                 ,Realese_date date   
                 ,Album_img VARCHAR(300)
                 ,Album_link VARCHAR(300)
@@ -104,7 +106,7 @@ class DataConn:
                     cur,
                 f'''
                     INSERT INTO {table} (Id, Album_type, Album_name, Artist_name, Total_tracks, 
-                    Album_genre, Realese_date, Album_img, Album_link, Artist_link,
+                    Album_genre, Popularity, Realese_date, Album_img, Album_link, Artist_link,
                     Load_date)
                     VALUES %s
                     ''',
@@ -167,7 +169,7 @@ class DataManager:
             results = sp.new_releases(limit=50)
 
             # Crear la lista destino donde se alojaran los datos con las columnas que necesitamos
-            data = {'Id': [],'Album_type': [], 'Album_name': [],'Artist_name': [],'Total_tracks': [],'Album_genre':[], 'Realese_date': [], 'Album_img': [],'Album_link':[],'Artist_link':[],'Load_date': []}
+            data = {'Id': [],'Album_type': [], 'Album_name': [],'Artist_name': [],'Total_tracks': [],'Album_genre':[],'Popularity':[], 'Realese_date': [], 'Album_img': [],'Album_link':[],'Artist_link':[],'Load_date': []}
             # Iterar los elementos necesarios e instanciamos cada uno de ellos
             for album in results['albums']['items']:
                 id = album['id']
@@ -177,6 +179,7 @@ class DataManager:
                 total_tracks = album['total_tracks']
                 artist_id = album['artists'][0]['id']
                 album_genre = sp.artist(artist_id)['genres']
+                popularity = sp.artist(artist_id)['popularity']
                 realese_date = album['release_date']
                 album_img = album['images'][0]['url'] 
                 album_link = album['external_urls']['spotify']
@@ -196,6 +199,7 @@ class DataManager:
                 data['Artist_name'].append(artist_name)
                 data['Total_tracks'].append(total_tracks)
                 data['Album_genre'].append(album_genre)
+                data['Popularity'].append(popularity)
                 data['Realese_date'].append(realese_date)
                 data['Album_img'].append(album_img)
                 data['Album_link'].append(album_link)

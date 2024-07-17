@@ -1,6 +1,6 @@
 
 import os
-from modules import DataManager, DataConn
+from modules import DataManager, DataConn, DbMAnager
 from modules.Utilities import send_email
 from dotenv import load_dotenv
 from datetime import timedelta,datetime
@@ -27,26 +27,26 @@ table='stage_spotify_new_releases_table'
 schema = "mauroalberelli_coderhouse"
 
 # Instanciar las Clases
-data_conn = DataConn(user_credentials, schema)
+db_manager = DbMAnager(user_credentials, schema)
 SpotifyApi = DataManager()
 
 # Definir nuestras funciones para pasarle al operador del DAG()
 def start_conn(): 
-    data_conn.connect_Db()
+    db_manager.connect_Db()
 
 def tables():
-    data_conn.create_table(table)  
+    db_manager.create_table(table)  
 
 def get_and_transform():
     data=SpotifyApi.data_transform()
     return data
 
 def insert_data(data,table):
-    data_conn.upload_data(data,table)
+    db_manager.upload_data(data,table)
 
 def get_sql_result(**kargs):
     ti=kargs['ti']
-    data_conn.get_query_result(ti,table)
+    db_manager.get_query_result(ti,table)
     
 
 # Argumentos por defecto para el DAG
@@ -62,7 +62,7 @@ default_args = {
 with DAG(dag_id='Spotify_data_pipeline',
         default_args=default_args,
         description='Agrega datos de los 50 ultimos lanzamientos en spotify',
-        schedule_interval="@daily",
+        schedule_interval="@weekly",
         catchup=False) as dag:
     
     # Pasar nuestras funciones creadas para que las ejecute el Operator

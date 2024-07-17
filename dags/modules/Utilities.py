@@ -16,7 +16,7 @@ def hashing_data(value):
 
 def format_message(result):
     if result:
-        message= "<h2>Resultado de su consulta SQL: \n\n</h2>"
+        message= "<h2>Los Datos fueron cargados con exito! \n\n Resultado de su consulta SQL: \n\n</h2>"
         message += "<table border='1' style='border-collapse:collapse;'>"
         message += "<tr>"
         columns_names = ['Album_name','Artist_name','Album_genre','Album_link','Realese_date']
