@@ -1,16 +1,16 @@
 
-# <h2 align="center">:notes::notes::notes::rocket: Spotify's "New Releases" : ETL airflow pipeline Project :rocket::notes::notes::notes:</h2> 
+# <h2 align="center">:notes::notes::rocket: Spotify's "New Releases" : ETL airflow pipeline Project :rocket::notes::notes:</h2> 
 
 # ![Descripción](https://img.shields.io/badge/DESCRIPCION-7B9AE6?style=plastic) 
 
 Este proyecto consiste en un Pipeline de un ETL utilizando lenguaje Python, Airflow , la API de Spotify y AWS Redshift para recopilar datos de los álbums, que se actualiza periódicamente según los últimos 50 lanzamientos subidos en dicha plataforma en todo el mundo.
 
-Los componentes principales de este proyecto son las clases contructoras Dataconn, DbManager y  DataManager situadas en el Módulo __ETL_manager.py__, cada una de las cuales ejecuta a través de funciones los pasos de conexión con base de datos , creación de tablas y querys, extracción, transformación y carga de datos en las mismas, respectivamente. 
+Los componentes principales de este proyecto son las clases contructoras __*Dataconn*__, __*DbManager*__ y  __*DataManager*__ situadas en el Módulo __ETL_manager.py__, cada una de las cuales ejecuta a través de funciones los pasos de conexión con base de datos , creación de tablas y querys, extracción, transformación y carga de datos en las mismas, respectivamente. 
 Todo esto orquestado con funciones y tareas creadas desde un DAG de airflow en el archivo __Pipeline-ETL_Spotify.py__.
 La cadena de ejecucion de tareas seria:
-conexion con la db >>  crear tablas >> tomar datos de la api, limpiarlos y trasformarlos en dataframe >> insertar los datos en la tabla >> filtrar con una query SQL la tabla >> envio de mail confirmando la carga exitosa de datos y el resultado de las query.
+conexión con la db >>  crear tablas >> tomar datos de la api, limpiarlos y trasformarlos en dataframe >> insertar los datos en la tabla >> filtrar con una query SQL la tabla >> envio de mail confirmando la carga exitosa de datos y el resultado de las query.
 
-En el módulo __*Utilities*__ vamos a encontrar herramientas que nos ayuda en la performance de nuestro codigo , com ser una función de hasheo , otra que le da formatos a las alertas y email y tambien el modulo de envio de mensajeria.
+En el módulo __*Utilities*__ vamos a encontrar herramientas que nos ayuda en la performance de nuestro código , como ser una función de hasheo , otra que le da formatos a las alertas y email y tambien el módulo de envío de mensajeria.
 
 
 ## ![La función Extract ](https://img.shields.io/badge/LA_FUNCION_EXTRACT-8A2BE2)*![ok ](https://img.shields.io/badge/data_exctract()-orange) #
