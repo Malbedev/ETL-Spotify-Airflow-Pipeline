@@ -1,12 +1,16 @@
 
-# <h1 align="center">:notes::notes::notes::rocket:![Descripción](https://img.shields.io/badge/Spotify_'_s_"New_Releases"_:_ETL--airflow--pipeline--Project-20B2AA?style=for-the-badge):rocket::notes::notes::notes:</h1> 
+# <h1 align="center">:notes::notes::notes::rocket: Spotify's "New Releases" : ETL airflow pipeline Project :rocket::notes::notes::notes:</h1> 
 
 # ![Descripción](https://img.shields.io/badge/DESCRIPCION-7B9AE6?style=plastic) 
 
 Este proyecto consiste en un Pipeline de un ETL utilizando lenguaje Python, Airflow , la API de Spotify y AWS Redshift para recopilar datos de los álbums, que se actualiza periódicamente según los últimos 50 lanzamientos subidos en dicha plataforma en todo el mundo.
 
-Los componentes principales de este proyecto son las dos clases contructoras DataManager y Dataconn situadas en el Módulo __ETL_manager.py__, cada una de las cuales ejecuta a través de funciones los pasos de extracción, transformación, conexión con base de datos y carga de datos en la misma, respectivamente. 
+Los componentes principales de este proyecto son las clases contructoras Dataconn, DbManager y  DataManager situadas en el Módulo __ETL_manager.py__, cada una de las cuales ejecuta a través de funciones los pasos de conexión con base de datos , creación de tablas y querys, extracción, transformación y carga de datos en las mismas, respectivamente. 
 Todo esto orquestado con funciones y tareas creadas desde un DAG de airflow en el archivo __Pipeline-ETL_Spotify.py__.
+La cadena de ejecucion de tareas seria:
+conexion con la db >>  crear tablas >> tomar datos de la api, limpiarlos y trasformarlos en dataframe >> insertar los datos en la tabla >> filtrar con una query SQL la tabla >> envio de mail confirmando la carga exitosa de datos y el resultado de las query.
+
+En el módulo __*Utilities*__ vamos a encontrar herramientas que nos ayuda en la performance de nuestro codigo , com ser una función de hasheo , otra que le da formatos a las alertas y email y tambien el modulo de envio de mensajeria.
 
 
 ## ![La función Extract ](https://img.shields.io/badge/LA_FUNCION_EXTRACT-8A2BE2)*![ok ](https://img.shields.io/badge/data_exctract()-orange) #

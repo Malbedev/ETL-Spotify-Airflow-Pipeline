@@ -1,16 +1,15 @@
 
 import os
-from modules import DataManager, DataConn, DbMAnager
+from modules import DataManager, DataConn, DbManager
 from modules.Utilities import send_email
 from dotenv import load_dotenv
 from datetime import timedelta,datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 
-### El archivo __main__ ejecutara todo nuestro código desarrollado en el archivo ETL_manager,
-### asignando los valores necesarios para la ejecución de cada método.
+# Construcción de nuesrto DAG 
 
-#Llamar al método de la libreria dotenv para obtener nustras variables de entorno 
+# Llamar al método de la libreria dotenv para obtener nustras variables de entorno 
 load_dotenv()
 
 # Agregar a un diccionario nuestras credenciales 
@@ -27,7 +26,7 @@ table='stage_spotify_new_releases_table'
 schema = "mauroalberelli_coderhouse"
 
 # Instanciar las Clases
-db_manager = DbMAnager(user_credentials, schema)
+db_manager = DbManager(user_credentials, schema)
 SpotifyApi = DataManager()
 
 # Definir nuestras funciones para pasarle al operador del DAG()
@@ -58,7 +57,7 @@ default_args = {
     
 }
 
-# Definir el DAG con intervalo @daily(diario) para su ejecución
+# Definir el DAG con intervalo @weekly(semanal) para su ejecución
 with DAG(dag_id='Spotify_data_pipeline',
         default_args=default_args,
         description='Agrega datos de los 50 ultimos lanzamientos en spotify',
@@ -71,6 +70,7 @@ with DAG(dag_id='Spotify_data_pipeline',
     # Pasar como argumentos funciones en un lambda para recuperar y trasmitir de tarea a tarea los resultados de dichas funciones
     task_process_data = PythonOperator(task_id='Process-Data',python_callable=lambda:get_and_transform())
     task_insert_data = PythonOperator(task_id='Upload-Data',python_callable=lambda:insert_data(get_and_transform(),table))
+    # Pasar argumentos en este caso con un contexto, usamos xcom y task instance (ti) para pasar los valores entre tareas
     task_get_sql_result = PythonOperator(task_id='Get_sql_result',python_callable=get_sql_result,provide_context=True)
     task_send_email = PythonOperator(task_id='Send_email',python_callable=send_email,provide_context=True)
 

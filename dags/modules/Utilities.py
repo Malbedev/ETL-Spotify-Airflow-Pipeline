@@ -4,7 +4,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-#Crear Función para hashear/modificar con valores ficticios información necesaria 
+# Crear función para hashear/modificar con valores ficticios 
+# información necesaria, 
 # usando la libreria hashlib
 def hashing_data(value):
         if pd.isnull(value):
@@ -13,7 +14,7 @@ def hashing_data(value):
          value = str(value)
         return hashlib.sha256(value.encode()).hexdigest()[:6]
 
-
+# Crear función pára darle formato al mensaje que envia las alertas/mails en este caso Html.
 def format_message(result):
     if result:
         message= "<h2>Los Datos fueron cargados con exito! \n\n Resultado de su consulta SQL: \n\n</h2>"
@@ -34,8 +35,8 @@ def format_message(result):
 
     return message
 
+# Método para enviar mails con la librería smtp y email de python.
 def send_email(**kargs):
-
     subject = kargs["var"]["value"].get("subject_mail")
     from_address = kargs["var"]["value"].get("email")
     password = kargs["var"]["value"].get("email_password")

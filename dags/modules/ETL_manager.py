@@ -25,7 +25,8 @@ logging.basicConfig(
     level=logging.INFO)
 
 ### Gererar la clase constructura para la conexión a la base de dato 
-#  que admite como parametros un diccionario con las credenciales y un STring con el nombnre del schema ###
+# que admite como parametros un diccionario con las credenciales 
+# y un STring con el nombnre del schema ###
 
 class DataConn:
     def __init__(self, config: dict,schema: str):
@@ -54,8 +55,14 @@ class DataConn:
             logging.error(f"Failed to create connection:{e}")
             raise
 
-class DbMAnager(DataConn):
-    # Crear una tabla con lenguaje SQL a travéz de la librería psycopg2, recibe un string con el nombre de la tabla
+## Crear una clase para el manejo de consultas sql de nuestra db,
+# que hereda de Dataconn los métodos connect_Db() y argumentos 
+# necesarios para la conxión a la db ## 
+
+class DbManager(DataConn):
+
+    # Crear una tabla con lenguaje SQL a travéz de la librería psycopg2
+    # recibe un string con el nombre de la tabla
     def create_table(self,table:str):
             logging.info("Creating table....")
             schema=self.schema
@@ -89,8 +96,9 @@ class DbMAnager(DataConn):
                 logging.error(f"Failed to create table:{e}")
                 raise
 
-    # Cargar la data en nuestra tabla creada anteriormente #
-    ### Función que recibe com parámetros un Dataframe de pandas y un string con el nombre de la tabla ###
+    ### Cargar la data en nuestra tabla creada anteriormente 
+    # Función que recibe com parámetros un Dataframe de pandas y un string
+    # con el nombre de la tabla ###
     def upload_data(self,data: pd.DataFrame, table: str):
          
          logging.info("inserting data to table....")
@@ -120,7 +128,8 @@ class DbMAnager(DataConn):
                     logging.info("Connection to Redshift closed.")
                 except Exception as e:
                     logging.error(f"Failed to upload data to {self.schema}.{table}: {e}")
-                    
+
+    # Función que ejecuta las querys             
     def execute_query(self,query:str, table: str):
          conn = self.connect_Db()
          
@@ -135,6 +144,8 @@ class DbMAnager(DataConn):
                 except Exception as e:
                     logging.error(f"Failed query execution to {self.schema}.{table}: {e}")      
 
+    # Función que formula las querys y utiliza las xcom y task instance (ti) 
+    # para pasarles los resultados a las tareas
     def get_query_result(self,ti,table:str):
 
         query=f"""SELECT Album_name,Artist_name,Album_genre,Album_link,Realese_date 
@@ -149,13 +160,11 @@ class DbMAnager(DataConn):
 
 ## Crear una clase para el manejo de los datos ## 
 class DataManager:
-
     def __init__(self):
         self.data = None
 
-    # Extraer la data de la Api
-
-    ### Esta función nos devuelve los datos obtenidos de la api  
+    ### Extraer la data de la Api
+    # Esta función nos devuelve los datos obtenidos de la api  
     # en una lista de diccionarios,con los valores requeridos ###
     def data_extract(self):
        
@@ -214,9 +223,9 @@ class DataManager:
             logging.warn("Check the data format")
 
     
-    # Trasformar la data con pandas
-
-    ### Esta función nos devuelve un Dataframe de pandas con las trasformaciones correpondientes###
+    ### Trasformar la data con pandas
+    # Esta función nos devuelve un Dataframe de pandas 
+    # con las trasformaciones correpondientes ###
     def data_transform(self):
         try:
             # Llamar a nuestra función de extracción e instanciar en una variable
