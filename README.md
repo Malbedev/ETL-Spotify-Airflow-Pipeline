@@ -16,7 +16,7 @@ En el módulo __*Utilities*__ vamos a encontrar herramientas que nos ayuda en la
 ## ![Extract ](https://img.shields.io/badge/EXTRACT-8A2BE2)*![ok ](https://img.shields.io/badge/data_exctract()-orange) #
 
 La forma en que interactuamos con la API de Spotify es mediante el uso de la biblioteca __SPOTIPY__ y ayuda principalmente con la autenticación de la API.Una vez que se han extraído los datos, se almacenan en un diccionario de python.
-Se puede conseguir las credenciales de la API de Spotyfy en el siguiente link
+Se puede conseguir las credenciales de la API de Spotyfy en el siguiente link ---->
 Generate your Spotify API access keys here: https://developer.spotify.com
 
 ## ![La función Transform ](https://img.shields.io/badge/TRANSFORM-8A2BE2)*![ok ](https://img.shields.io/badge/data__trasnform()-orange) #
