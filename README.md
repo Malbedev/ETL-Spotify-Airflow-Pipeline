@@ -1,5 +1,5 @@
 
-# <h2 align="center">:notes::notes::rocket: Spotify's "New Releases" : ETL-Airflow-pipeline-project :rocket::notes::notes:</h2> 
+# <h2 align="center">:notes::notes::rocket: Spotify's "New Releases" : ETL-Airflow-pipeline-Project :rocket::notes::notes:</h2> 
 
 # ![Descripción](https://img.shields.io/badge/DESCRIPCION-7B9AE6?style=plastic) 
 
